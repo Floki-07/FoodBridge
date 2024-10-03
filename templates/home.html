@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodBridge-Home</title>
+    <link rel="stylesheet" href="../static/style.css">
+
+</head>
+
+<body>
+    <div class="container1">
+        <div class="heading">
+            Welcome to FoodBridge
+        </div>
+        <div class="choice black">
+            Choose one of the option from below
+        </div>
+        <div class="box">
+            <div class="ngo">
+                <div class="logintype">
+                    <h3>NGO Login</h3>
+                    <img src="../static/assets/down.svg" height="30px">
+
+                </div>
+
+                <a href="{{ url_for('ngo_login')  }}">
+                    <button type="submit">
+                        <img src="../static/assets/ngo.jpg" alt="" srcset="">
+                    </button>
+                </a>
+            </div>
+
+            <div class="res">
+                <div class="logintype">
+                    <h3>Restaurant Login</h3>
+                    <img src="../static/assets/down.svg" height="30px">
+                </div>
+                <a href="{{ url_for('res_login' )  }}">
+                    <button type="submit">
+                        <img src="../static/assets/res.jpg" alt="" srcset="">
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

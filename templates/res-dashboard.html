@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant-Dashboard</title>
+    <style>
+        .container {
+            display: flex;
+            gap: 7px;
+        }
+
+        .requests {
+            width: 70vw;
+            border: 2px solid green;
+            height: 30vh;
+            overflow-y: scroll;
+        }
+
+        .headings ul {
+            display: flex;
+            gap: 10px;
+            width: 60vw;
+        }
+
+        .headings ul li {
+            display: flex;
+            gap: 10px;
+            width: 60vw;
+            border: 2px solid black;
+            padding: 10px 12px;
+            border-radius: 6px;
+            justify-content: space-between;
+        }
+
+        .data ul {
+            gap: 10px;
+            width: 60vw;
+        }
+
+        .data ul li {
+            display: flex;
+            gap: 10px;
+            width: 59vw;
+            border: 2px solid rgb(156, 5, 156);
+            justify-content: space-between;
+            margin: 10px 0px;
+            border-radius: 7px;
+            padding: 7px;
+            align-items: center;
+            height: 6vh;
+        }
+
+        #hid {
+            display: none;
+        }
+
+        .icons {
+            display: flex;
+            gap: 20px;
+            cursor: pointer;
+            height: 20px;
+            align-items: center;
+        }
+
+        .ngoname {
+            width: 12vw;
+        }
+
+        .surplus {
+            border: 2px solid rgb(5, 5, 5);
+            width: 25vw;
+            height: 20vh;
+            position: fixed;
+            border-radius: 7px;
+            right: 4px;
+        }
+
+        #surHead {
+            font-size: 20px;
+            margin: 10px 10px;
+            font-weight: 500;
+        }
+
+        .box {
+            display: flex;
+            gap: 20px;
+            width: 20vw;
+            margin-left: 10px;
+            margin-top: 25px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .btnsurplus {
+            padding: 7px;
+            border: none;
+            background: #bb86fc;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+
+        }
+
+        .btnsurplus:hover {
+            background-color: #9555e4;
+            scale: 1.02;
+        }
+
+        #meals {
+            display: none;
+
+        }
+
+        .mealnoHidden {
+            display: none;
+        }
+
+        .ngoIdHidden {
+            display: none;
+        }
+
+        #meal_state {
+            display: none;
+        }
+
+        nav {
+            width: 90vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .logout {
+            padding: 5px 7px;
+            background-color: red;
+            border: none;
+            color: white;
+            font-weight: 700;
+            border-radius: 4px;
+        }
+
+        .cont2 {
+            /* border: 2px solid blue; */
+            width: 70vw;
+            height: 60vh;
+            margin-top: 10px;
+            margin-bottom: 40px;
+
+        }
+
+        .boxForDonation {
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px solid rgb(46, 41, 41);
+            /* width: 20px; */
+            height: 60vh;
+            padding: 10px;
+            gap: 10px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-radius: 7px;
+            margin: 20px 5px 30px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: center;
+            width: 17vw;
+            gap: 10px;
+            padding: 8px;
+            transition: all .3s;
+            border: 2px solid black;
+            border-radius: 6px;
+            height: 55vh;
+        }
+
+        .card:hover {
+            background-color: rgb(219, 214, 214);
+            scale: 1.01;
+        }
+
+        .card img {
+            /* width:267px; */
+            object-fit: cover;
+            width: inherit;
+        }
+
+        #Nname {
+            font-size: larger;
+            font-weight: 800;
+        }
+
+        .card button {
+            text-align: center;
+            border: none;
+            background-color: lightgreen;
+            padding: 7px;
+            border-radius: 5px;
+            /* margin: 5px; */
+            margin-left: 70px;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            background-color: rgb(57, 174, 212);
+            scale: 1.1;
+        }
+
+        .id {
+            display: none;
+        }
+
+        .donationmeals{
+            width: 6vw;
+            border: 2px solid black;
+            padding: 4px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+    <nav>
+        <h1>Welcome back {{session['name'] }},</h1>
+        <span id="hid"> {{session['rid']}}</span>
+
+
+        <div>
+            <a href="/logout">
+                <button class="btn logout">
+                    Logout
+                </button>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <h2>
+            Requests for surplus meals.
+        </h2>
+        <div class="container">
+            <div class="requests">
+                <div class="headings">
+                    <ul>
+                        <li>
+                            <span>Name of NGO</span>
+                            <span id="mealno">No. of meals requested</span>
+                            <span id="icons">Accept/Reject</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="data">
+                    <ul>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="surplus">
+                <span id="surHead">Surplus Meals</span>
+                <div class="box">
+                    <button class="btnsurplus">
+                        Calculate excess meals
+                    </button>
+                    <span id="meal_state">Number of surplus meals =</span>
+                    <span id="meals"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <h3>Make Donations</h3>
+        <div class="cont2 border">
+            <div class="Donations">
+                <div class="boxForDonation">
+                    <!-- <div class="card">
+                        <img src="../static/assets/res.jpg" alt="">
+                        <span class="id">${res[i][0]}</span>
+                        <span id="Hname">${res[i][1]}</span>
+                        <span>${res[i][2]}</span>
+                        <span> <input type="number" class="donationmeals">
+                            <button class="Donatebutton">Donate</button></span>
+                    </div>`; -->
+                </div>
+            </div>
+        </div>
+
+
+
+    </main>
+
+
+    <script>
+        //collect all req related to curr restaurant.
+        async function get_request(curr_hid) {
+            let res = await fetch(`/get_requests_res/${curr_hid}`);
+            let arr = await res.json();
+            return arr;
+        }
+        async function get_name(nid) {
+            let res = await fetch(`/ngo_name/${nid}`);
+            let Nname = await res.json();
+            return Nname['name'];
+        }
+
+        async function sendAcceptReq(nid, hid) {
+            let res = await fetch(`/accept_req/${curr_hid}/${nid}`)
+            console.log(res);
+        }
+        async function reject_req(nid, hid) {
+            let res = await fetch(`/reject_req/${curr_hid}/${nid}`)
+            console.log(res);
+        }
+        let curr_hid;
+        async function handleRequest() {
+            curr_hid = parseInt(document.getElementById('hid').innerText);
+            let arr = await get_request(curr_hid);
+            let content = document.querySelectorAll('.data')[0].getElementsByTagName('ul')[0];
+            for (const obj of arr) {
+                const nid = obj[1];
+                const meals = obj[2];
+                let name_ngo = await get_name(nid);
+                content.innerHTML = content.innerHTML + `
+                    <li>
+                        <span class="ngoname">${name_ngo}</span>
+                        <span class="mealno">${meals}</span>
+                        <span class="icons">
+                            <img class="accept" src="../static/assets/accept-icon.webp" height="30px" alt="">
+                            <img class="reject" src="../static/assets/close.svg" alt="">
+                             <span class="mealnoHidden">${meals}</span>
+                             <span class="ngoIdHidden">${nid}</span>
+                        </span>
+                    </li>`;
+            }
+
+
+
+            //surplus block
+            document.querySelector('.btnsurplus').addEventListener('click', () => {
+
+                document.getElementById('meals').innerHTML = Math.round(20 + Math.random() * 10);
+                document.getElementById('meals').style.display = "block";
+                document.querySelector('.btnsurplus').style.display = "none"
+                document.getElementById('meal_state').style.display = "block"
+            })
+            let lis = document.querySelector('.data').getElementsByClassName('accept')
+            let acs = Array.from(lis)
+
+            acs.forEach(element => {
+                element.addEventListener('click', (e) => {
+                    let reqmeal = parseInt(element.closest('span').getElementsByClassName('mealnoHidden')[0].innerHTML)
+                    let nid = parseInt(element.closest('span').getElementsByClassName('ngoIdHidden')[0].innerHTML)
+
+
+                    let totalMeals = parseInt(document.getElementById('meals').innerHTML)
+
+                    if (reqmeal == 0) {
+                        alert("You don't have any surplus meals left.")
+                    }
+                    if (totalMeals >= reqmeal) {
+                        totalMeals -= reqmeal
+                        document.getElementById('meals').innerHTML = totalMeals
+                        sendAcceptReq(nid, curr_hid);
+                        element.closest('li').style.display = "none";
+                    } else {
+                        alert('Meals are not sufficient.')
+                    }
+                })
+            });
+
+
+
+            let rej_svgs = document.querySelector('.data').getElementsByClassName('reject')
+            let arr_of_rej = Array.from(rej_svgs)
+            arr_of_rej.forEach(element => {
+                element.addEventListener('click', () => {
+                    element.style.display = "none";
+                    let nid = parseInt(element.closest('span').getElementsByClassName('ngoIdHidden')[0].innerHTML)
+                    console.log('reject btn was clicked');
+                    reject_req(nid, curr_hid);
+                    alert('Rejected')
+                    element.closest('li').style.display = "none";
+                })
+            });
+
+        }
+
+        handleRequest();
+
+
+
+
+        //donations
+        async function  send_req(nid,hid,meals){
+            await fetch(`/donate/${nid}/${hid}/${meals}`)
+        }
+        
+        async function get_all_ngos() {
+            let res = await fetch(`res-dashboard`);
+            let all_ngos = await res.json();
+            console.log(all_ngos);
+            for (let i = 0; i < all_ngos.length; i++) {
+                const element = all_ngos[i];
+                let cardHTML = `
+                <div class="card">
+                    <img src="../static/assets/ngo.jpg" alt="">
+                    <span class="id">${all_ngos[i][0]}</span>
+                    <span id="Nname">${all_ngos[i][1]}</span>
+                    <span>${all_ngos[i][2]}</span>
+                     <span> <input type="number" class="donationmeals">
+                            <button class="Donatebutton">Donate</button></span>
+                </div>`;
+                document.querySelector('.boxForDonation').innerHTML += cardHTML;
+            }
+
+
+            let all_btns=Array.from(document.getElementsByClassName('Donatebutton'))
+            for (let i = 0; i < all_btns.length; i++) {
+                const element = all_btns[i];
+                element.addEventListener('click', () => {  
+                    let card=element.closest('div')
+                    let ngo_id=parseInt(card.querySelector('.id').innerHTML)
+                    let meals=card.getElementsByTagName('input')[0].value
+                    send_req(ngo_id,curr_hid,meals);
+                    let totalMeals = parseInt(document.getElementById('meals').innerHTML)
+                    if(totalMeals==0){
+                        alert('You dont have any meals left to donate.')
+                    }
+                    else if(totalMeals<meals){
+                        alert("You don't have enough meals to donate. ")
+                    }
+                    else if(totalMeals>= meals){
+                        totalMeals-=meals;
+                        document.getElementById('meals').innerHTML=totalMeals;
+                        card.style.display="none";
+                    }
+                })
+            }
+        }
+        get_all_ngos()
+
+    </script>
+</body>
+
+</html>

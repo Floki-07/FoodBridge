@@ -1,0 +1,136 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to fetch hotel name by ID
+    async function getname(hid) {
+        console.log('inside getname function');
+        let hres = await fetch(`/hotel_name/${hid}`);
+        let hname = await hres.json();
+        return hname['name'];
+    }
+
+    // Populate cards with restaurant data
+    const res = {{ all_res | tojson }};
+    for (let i = 0; i < res.length; i++) {
+        const element = res[i];
+        let cardHTML = `
+            <div class="card">
+                <img src="../static/assets/res.jpg" alt="">
+                <span class="id">${res[i][0]}</span>
+                <span id="Hname">${res[i][1]}</span>
+                <span>${res[i][2]}</span>
+                <button class="Requestbutton">Request</button>
+            </div>`;
+        document.querySelector('.box').innerHTML += cardHTML;
+    }
+
+    // Show modal when "Request" button is clicked
+    Array.from(document.getElementsByClassName('Requestbutton')).forEach(element => {
+        element.addEventListener('click', (e) => {
+            let cardElement = e.currentTarget.closest('.card');
+            let curr_hid = cardElement.querySelector('.id').innerText;
+
+            const box = document.getElementsByClassName('modal')[0];
+            box.style.display = 'block';
+            
+            // Fetch and display hotel details in the modal
+            fetchHotelDetails(curr_hid);
+        });
+    });
+
+    // Fetch hotel details and display in the modal
+    async function fetchHotelDetails(curr_hid) {
+        try {
+            const resp = await fetch(`/get_hotel_data/${curr_hid}`);
+            if (!resp.ok) {
+                throw new Error(`HTTP error! status: ${resp.status}`);
+            }
+            const data = await resp.json();
+            const res_info = document.querySelector('.info');
+            res_info.innerHTML = `
+                <span class="id">${curr_hid}</span>
+                <ul>
+                    <li><b>Name: </b>${data[1]}</li>
+                    <li><b>Address: </b>${data[2]}</li>
+                    <li><b>Phone Number: </b>${data[3]}</li>
+                    <li><b>Email: </b>${data[4]}</li>
+                </ul>
+            `;
+        } catch (error) {
+            console.error('Error fetching hotel data:', error);
+        }
+    }
+
+    // Close modal
+    document.querySelector('.close').addEventListener('click', () => {
+        document.querySelector('.modal').style.display = "none";
+    });
+
+    document.querySelector('.close2').addEventListener('click', () => {
+        document.querySelector('.profilebox').style.display = "none";
+    });
+
+    document.querySelector('.profile').addEventListener("click", () => {
+        document.querySelector('.profilebox').style.display = "block";
+    });
+
+    // Send request when "Send Request" button is clicked
+    document.querySelector('.requestbutton').addEventListener('click', async () => {
+        const curr_hid = document.querySelector('.info .id').innerText;
+        const curr_nid = document.querySelector('.nid').innerText;
+        const no_of_meals = document.getElementById('mealbx').value;
+
+        try {
+            const response = await fetch(`/send_request/${curr_hid}/${curr_nid}/${no_of_meals}`);
+            if (response.status == 200) {
+                const res_hotel = await fetch(`/get_requst_details/${curr_nid}`);
+                if (!res_hotel.ok) {
+                    throw new Error(`HTTP error! status: ${res_hotel.status}`);
+                }
+                const all_req = await res_hotel.json();
+                const orders = document.querySelector('.orders');
+                orders.innerHTML = '';
+                for (const reqobj of all_req) {
+                    const hotelName = await getname(reqobj[0]);
+                    orders.innerHTML += `
+                        <ul>
+                            <li class="smallcard">
+                                <span class="border">${hotelName}</span>
+                                <span class="border">${reqobj[2]}</span>
+                                <span class="border">Status</span>
+                            </li>
+                        </ul>
+                    `;
+                }
+            } else {
+                alert('Request to hotel already sent');
+            }
+        } catch (error) {
+            console.error('Error sending request:', error);
+        }
+    });
+
+    // Initial display of existing requests
+    async function displayExistingRequests() {
+        const curr_nid = document.querySelector('.nid').innerText;
+        const res_hotel = await fetch(`/get_requst_details/${curr_nid}`);
+        if (res_hotel.ok) {
+            const all_req = await res_hotel.json();
+            const orders = document.querySelector('.orders');
+            orders.innerHTML = '';
+            for (const reqobj of all_req) {
+                const hotelName = await getname(reqobj[0]);
+                orders.innerHTML += `
+                    <ul>
+                        <li class="smallcard">
+                            <span class="border">${hotelName}</span>
+                            <span class="border">${reqobj[2]}</span>
+                            <span class="border">Status</span>
+                        </li>
+                    </ul>
+                `;
+            }
+        }
+    }
+
+    // Call the function to display existing requests when the page loads
+    displayExistingRequests();
+});

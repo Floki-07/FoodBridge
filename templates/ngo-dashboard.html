@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO-Dashboard</title>
+    <style>
+        .container {
+            display: flex;
+            width: 90vw;
+            margin: auto;
+            /* align-items: center; */
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .container>* {
+            border: 2px solid black;
+            height: 90vh;
+            padding: 6px;
+            background-color: #e9e7e7;
+
+        }
+
+        .res {
+            width: 70%;
+            border-radius: 7px;
+            margin-left: -49px;
+
+        }
+
+        .res .box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            overflow-y: scroll;
+            height: 77vh;
+            width: 60vw;
+            align-items: flex-start;
+            border-radius: 7px;
+        }
+
+        .requests {
+            width: 30vw;
+            border-radius: 6px;
+            height: 40vh;
+            border: 2px solid gray;
+            overflow-y: scroll;
+            overflow-x: hidden;background-color: white;
+
+            padding: 1px 20px 12px 1px;
+        }
+
+        .border {
+            border: 1px solid rgb(100, 19, 10);
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+            align-items: flex-start;
+            justify-content: center;
+            width: 17vw;
+            gap: 10px;
+            padding: 8px;
+            transition: all .3s;
+            /* border: 1px solid black; */
+            border-radius: 6px;
+            height: 50vh;
+            background-color: white;
+        }
+
+        .card:hover {
+            background-color: rgb(219, 214, 214);
+            scale: 1.01;
+        }
+
+        .card img {
+            /* width:267px; */
+            object-fit: cover;
+            width: inherit;
+        }
+
+        #Hname {
+            font-size: larger;
+            font-weight: 800;
+        }
+
+        .card button {
+            text-align: center;
+            border: none;
+            background-color: lightgreen;
+            padding: 7px;
+            border-radius: 5px;
+            /* margin: 5px; */
+            margin-left: 70px;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            background-color: rgb(57, 174, 212);
+            scale: 1.1;
+        }
+
+        .box {
+            padding: 6px 0px;
+            background-color: #e9e7e7;
+        }
+
+        .modal {
+            background-color: white;
+            width: 22vw;
+            height: 55vh;
+            position: absolute;
+            left: 368px;
+            border: 2px sold blue;
+            border-radius: 7px;
+            display: none;
+            z-index: 1;
+        }
+
+        .profilebox {
+            display: none;
+
+        }
+
+        .close {
+            position: absolute;
+            right: 9px;
+            top: 5px;
+            cursor: pointer;
+
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            width: 90vw;
+        }
+
+        .btn {
+            border: none;
+            background-color: lightgreen;
+            padding: 7px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px 5px;
+        }
+
+        .logout {
+            background-color: rgb(228, 44, 44);
+        }
+
+        .profile {
+            background-color: #bb86fc;
+        }
+
+        .id {
+            display: none;
+        }
+
+
+
+        .modal .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .request_meals {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border-radius: 5px;
+        }
+        .secondbox{
+            height: 100vh;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+        .nid {
+            display: none;
+        }
+
+        .smallcard {
+            /* background-color: #bb86fc; */
+            width: 27vw;
+            border: 1px solid black;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 9px;
+            border-radius: 10px;
+            margin-left: -27px
+        }
+
+        /* .subhead {
+            width: 8vw;
+            font-weight: 600;
+        } */
+        .subhead .meal {
+            width: 4vw;
+            font-weight: 600;
+        }
+
+        .accepted {
+            color: rgb(19, 172, 19);
+        }
+
+        .rejected {
+            color: rgb(216, 23, 23);
+        }
+
+        .pending {
+            color: orange;
+        }
+
+        .table {
+            display: flex;
+            gap: 5pxs;
+            margin-left: 44px;
+            justify-content: space-between;
+            border: 2px solid black;
+            border-radius: 10px;
+            padding: 2px 60px 2px 10px;
+            width: 20vw;
+        }
+
+        #emptyNote {
+            /* margin-left: 50px; */
+            margin-top: 30px;
+            position: absolute;
+            top: 161px;
+            left: 948px;
+            z-index: 1;
+            color: rgb(141, 6, 141);
+            font-size: 18px;
+            font-weight: 800;
+            margin-left: -12px;
+        }
+
+        .closeIcon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 5vw;
+            gap: 10px;
+            cursor: pointer;
+
+        }
+
+        .hidHidden {
+            display: none;
+        }
+
+        .ins {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+            margin-left: 48px;
+            gap: 3px;
+            margin-bottom: 11px;
+            /* justify-content: center; */
+        }
+
+        .ins img {
+            margin-bottom: -9px;
+        }
+
+        .donations {
+            border: 2px solid black;
+            height: 40vh;
+            border-radius: 5px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            background-color: white;
+
+        }
+        .donationList{
+            padding-bottom: 10px;
+            margin: 1px 5px;
+        }
+        .donationcard {
+            width: 29vw;
+            border: 1px solid black;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 9px;
+            border-radius: 10px;
+            margin-left: 12px;
+            margin-top: 11px;
+        }
+        .AcceptIconDonation{
+            width: 4vw;
+        }
+        .mealDonation{
+            width: 3vw;
+        }
+        .hnamedonation{
+            width: 7vw;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2>Welcome back {{session['name'] }}</h2>
+        <p class="nid">{{session['nid']}}</p>
+
+        <div>
+            <a href="/logout">
+                <button class="btn logout">
+                    Logout
+                </button>
+            </a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="res">
+            <h2>Restaurants</h2>
+            <div class="box">
+
+            </div>
+        </div>
+        <div class="secondbox">
+            <div class="requests">
+                <h2>Track Requests</h2>
+                <div class="table">
+                    <div class="name">
+                        Name
+                    </div>
+
+                    <div class="meal">
+                        No of meals
+                    </div>
+                    <div class="status">
+                        Status
+                    </div>
+                </div>
+                <span id="emptyNote">No requests have been made yet.</span>
+                <div class="orders">
+                    <ul>
+                        <li class="smallcard">
+                            <span class="subhead">${hotelName}</span>
+                            <span class="subhead meal">${reqobj[2]}</span>
+                            <div class="closeIcon">
+                                <span class="subhead rejected">Rejected</span>
+                                <img src="../static/assets/close.svg" alt="">
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="ins ">
+                <span>Click on the <img src="../static/assets/close.svg" alt="" srcset=""> to remove the request</span>
+                <span>Click on the <img src="../static/assets/Donation.svg" alt="" srcset=""> to Accept the
+                    Donation</span>
+            </div>
+
+            <div class="donations">
+                <h2>Track donations</h2>
+
+                <div class="table">
+                    <div class="name">
+                        Name
+                    </div>
+
+                    <div class="meal">
+                        No of meals
+                    </div>
+                    <div class="status">
+                        Accept
+                    </div>
+                </div>
+
+                <div class="donationList">
+                    <li class="donationcard">
+                        <span class="subhead">${hotelName}</span>
+                        <span class="subhead meal">${reqobj[2]}</span>
+                        <div class="closeIcon">
+                            <img src="../static/assets/Donation.svg" alt="">
+                        </div>
+                    </li>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal">
+            <h3> Restaurant Details</h3>
+            <div class="close">
+                <img src="../static/assets/close.svg" alt="">
+            </div>
+            <div class="box ">
+
+                <div class="info">
+                    <!-- <ul>
+                        <li><b>Name:</b></li>
+                        <li>Adddress: </li>
+                        <li>Phone Number: </li>
+                        <li>Email: </li>
+                    </ul> -->
+                </div>
+                <h3>Request the number of meals you want</h3>
+                <div class="request_meals">
+                    <input type="number" name="mealbx" id="mealbx">
+                    <button type="submit" class="btn profile sendReqToHotelbtn"> Send Request
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <!-- <div class="modal profilebox">
+            Ngo Details
+            <div class="close close2">
+                <img src="../static/assets/close.svg" alt="">
+            </div>
+        </div> -->
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => { });
+        async function getname(hid) {
+            let hres = await fetch(`/hotel_name/${hid}`);
+            let hname = await hres.json();
+            return hname['name'];
+        }
+
+        async function removeReq(nid, hid) {
+            await fetch(`remove_req/${nid}/${hid}`);
+            displayExistingRequests();
+        }
+        async function removeDonation(nid, hid) {
+            await fetch(`remove_donation/${nid}/${hid}`);
+            checkdonations();
+        }
+
+        function checkList() {
+            const requestList = document.querySelector('.orders');
+            const emptyNote = document.getElementById('emptyNote');
+
+            if (requestList.children.length === 0) {
+                emptyNote.style.display = 'block';
+            } else {
+                emptyNote.style.display = 'none';
+            }
+        }
+
+        window.onload = checkList;
+
+        const res = {{ all_res | tojson}};
+
+        for (let i = 0; i < res.length; i++) {
+            const element = res[i];
+            let cardHTML = `
+        <div class="card">
+            <img src="../static/assets/res.jpg" alt="">
+            <span class="id">${res[i][0]}</span>
+            <span id="Hname">${res[i][1]}</span>
+            <span>${res[i][2]}</span>
+            <button class="Requestbutton">Request</button>
+        </div>`;
+            document.querySelector('.box').innerHTML += cardHTML;
+        }
+
+        Array.from(document.getElementsByClassName('Requestbutton')).forEach(element => {
+            element.addEventListener('click', (e) => {
+                let cardElement = e.currentTarget.closest('.card');
+                let curr_hid = cardElement.querySelector('.id').innerText;
+
+                const box = document.getElementsByClassName('modal')[0];
+                box.style.display = 'block';
+
+                fetchHotelDetails(curr_hid);
+            });
+        });
+
+        document.querySelector('.close').addEventListener('click', () => {
+            document.querySelector('.modal').style.display = "none";
+        });
+
+        async function fetchHotelDetails(curr_hid) {
+            try {
+                const resp = await fetch(`/get_hotel_data/${curr_hid}`);
+                if (!resp.ok) {
+                    throw new Error(`HTTP error! status: ${resp.status}`);
+                }
+                const data = await resp.json();
+                const res_info = document.querySelector('.info');
+                res_info.innerHTML = `
+            <span class="id">${curr_hid}</span>
+            <ul>
+                <li><b>Name: </b>${data[1]}</li>
+                <li><b>Address: </b>${data[2]}</li>
+                <li><b>Phone Number: </b>${data[3]}</li>
+                <li><b>Email: </b>${data[4]}</li>
+            </ul>
+        `;
+            } catch (error) {
+                console.error('Error fetching hotel data:', error);
+            }
+        }
+
+        document.querySelector('.sendReqToHotelbtn').addEventListener('click', async () => {
+            const curr_hid = document.querySelector('.info .id').innerText;
+            const curr_nid = document.querySelector('.nid').innerText;
+            const no_of_meals = document.getElementById('mealbx').value;
+            const num = 1; // for pending req
+            try {
+                const response = await fetch(`/send_request/${curr_hid}/${curr_nid}/${no_of_meals}/${num}`);
+                if (response.status === 200) {
+                    displayExistingRequests();
+                    document.querySelector('.modal').style.display = "none";
+                    document.getElementById('emptyNote').style.display = "none";
+                } else {
+                    alert('Request to hotel already sent');
+                }
+            } catch (error) {
+                console.error('Error sending request:', error);
+            }
+        });
+
+        let curr_nid = -1;
+        async function displayExistingRequests() {
+            curr_nid = document.querySelector('.nid').innerText;
+            const res_hotel = await fetch(`/get_request_details/${curr_nid}`);
+            if (res_hotel.ok) {
+                const all_req = await res_hotel.json();
+                const orders = document.querySelector('.orders');
+                orders.innerHTML = '';
+                for (const reqobj of all_req) {
+                    const hotelName = await getname(reqobj[0]);
+                    let requestStatus = reqobj[3] === 0 ? 'Rejected' : (reqobj[3] === 1 ? 'Pending' : 'Accepted');
+                    orders.innerHTML += `
+                    <ul>
+                        <li class="smallcard">
+                            <span class="subhead">${hotelName}</span>
+                            <span class="subhead meal">${reqobj[2]}</span>
+                            <div class="closeIcon">
+                                <span class="subhead ${requestStatus.toLowerCase()}">${requestStatus}</span>
+                                <span class="subhead hidHidden">${reqobj[0]}</span>
+                                <img class="closesvg" src="../static/assets/close.svg" alt="">
+                            </div>
+                        </li>
+                    </ul>
+                `;
+                }
+                checkList();
+
+                Array.from(document.querySelectorAll(".closesvg")).forEach(element => {
+                    element.addEventListener('click', (e) => {
+                        let curr_hid = parseInt(e.currentTarget.closest('.closeIcon').querySelector('.hidHidden').innerHTML);
+                        removeReq(curr_nid, curr_hid);
+                    });
+                });
+            }
+        }
+
+        displayExistingRequests();
+
+
+
+        async function checkdonations() {
+            let res = await fetch(`/get_donations/${curr_nid}`);
+            let all_donations = await res.json();
+            const donations = document.querySelector('.donationList');
+
+            donations.innerHTML = '';
+            for (const reqobj of all_donations) {
+                const hotelName = await getname(reqobj[0]);
+
+                donations.innerHTML += `
+                   <li class="donationcard">
+                        <span class="subhead hnamedonation">${hotelName}</span>
+                        <span class="subhead mealDonation">${reqobj[2]}</span>
+                        <div class="AcceptIconDonation">
+                            <span class="subhead hidHidden">${reqobj[0]}</span>
+                            <img src="../static/assets/Donation.svg" alt="" class="donationAccept">
+                        </div>
+                    </li>
+                `;
+            }
+
+
+            Array.from(document.querySelectorAll(".donationAccept")).forEach(element => {
+                element.addEventListener('click', (e) => {
+                    let curr_hid = parseInt(e.currentTarget.closest('.AcceptIconDonation').querySelector('.hidHidden').innerHTML);
+                    removeDonation(curr_nid, curr_hid);
+                });
+            });
+        };
+
+
+        checkdonations();
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>
